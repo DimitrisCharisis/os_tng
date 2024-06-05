@@ -380,22 +380,45 @@ SeaBIOS
 SeaBIOS is an open source BIOS implementation. QEMU uses SeaBIOS as its
 canonical BIOS.
 
-> **TODO** Add instructions about how to download and build SeaBIOS and SeaVGABIOS with debug symbols.
+To download and build SeaBIOS with debug symbols:
+1. Download the latest release from `www.seabios.org/downloads/`. As of now, this is the `seabios-1.16.3`.
+```
+$ cd boot
+$ wget https://www.seabios.org/downloads/seabios-1.16.3.tar.gz
+$ tar xvf seabios-1.16.3.tar.gz
+$ rm seabios-1.16.3.tar.gz
+$ SB=seabios-1.16.3
+$ cd $SB
+$ make menuconfig
+```
+And select:
+```
+$ VGA ROM > VGA Hardware Type > (X) QEMU/Bochs Original IBM 256K VGA
+$ Debugging > Serial port debugging
+```
+
+1. Build SeaBIOS with the new configuration via `make`.
+
+
+> **TODO** Add instructions about how to download and build SeaVGABIOS with debug symbols.
 > Use these artifacts with QEMU + gdb.
 
 After building SeaBIOS, make the new binaries appear exactly
 as QEMU on Debian expects them, and start the VM:
    ```
+   $ SB=seabios-1.16.3
    $ cd $SB/out
    $ ln -s vgabios.bin vgabios-stdvga.bin
    $ ln -s bios.bin bios-256k.bin
-   $ objcopy --adjust-vma 0xf0000 out/rom16.o rom16offset.o
-   $ objcopy --adjust-vma 0xc0000 out/vgarom.o vgaromoffset.o
-   $ qemu-system-i386 -drive if=floppy,index=0,format=raw,file=floppy1.raw.bin -display curses -L $SB/out
+   $ objcopy --adjust-vma 0xf0000 rom16.o rom16offset.o
+   $ objcopy --adjust-vma 0xc0000 vgarom.o vgaromoffset.o
+   $ cd ../../ 
+   $ qemu-system-i386 -bios $SB/out/bios-256k.bin -drive if=floppy,index=0,format=raw,file=floppy1.raw.bin -display curses -s -S
    ```
 
 Connect with gdb:
    ```
+   $ gdb $SB/out/rom16.o
    (gdb) source qemu-i8086.gdb
    (gdb) source seabios.gdb
    ```
