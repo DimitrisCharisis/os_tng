@@ -397,7 +397,7 @@ $ VGA ROM > VGA Hardware Type > (X) QEMU/Bochs Original IBM 256K VGA
 $ Debugging > Serial port debugging
 ```
 
-1. Build SeaBIOS with the new configuration via `make`.
+2. Build SeaBIOS with the new configuration via `make`.
 
 
 > **TODO** Add instructions about how to download and build SeaVGABIOS with debug symbols.
@@ -406,7 +406,6 @@ $ Debugging > Serial port debugging
 After building SeaBIOS, make the new binaries appear exactly
 as QEMU on Debian expects them, and start the VM:
    ```
-   $ SB=seabios-1.16.3
    $ cd $SB/out
    $ ln -s vgabios.bin vgabios-stdvga.bin
    $ ln -s bios.bin bios-256k.bin
