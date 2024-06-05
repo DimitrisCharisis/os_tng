@@ -36,7 +36,7 @@ The boot process consists of the following main stages:
    first ROMs which the BIOS jumps to contains the VGA BIOS, which initializes
    the display. Finally, the BIOS loads the first 512-byte sector of the chosen
    boot device (let's assume a hard disk) into a specific location in memory
-   (`0000:07C00` in 8086 real mode), and jumps to it directly.
+   (`0000:7C00` in 8086 real mode), and jumps to it directly.
 
       ![A disk is a series of numbered blocks/sectors](https://manybutfinite.com/img/boot/masterBootRecord.png)
 
@@ -311,7 +311,7 @@ Here is an [interesting tutorial](https://stackoverflow.com/questions/32955887/h
 
 1. Assemble into ELF32 and include debugging information in DWARF format:
       ```
-      $ nasm -f elf32 -g -F dwarf floppy0.dbg.asm -o floppy.dbg.o
+      $ nasm -f elf32 -g -F dwarf floppy0.dbg.asm -o floppy0.dbg.o
       ```
    Note the file doesn't include any information on the start address,
    `0000:7c00`, we use the linker for this.
@@ -678,10 +678,12 @@ the whole device. Here is a [useful blog post]
 1. Install `grub2` on your **host** computer, if it's not already installed on
    your host: [WSL 2 distributions don't include it normally]
 
+   ```
    host:/# dpkg -l | grep grub2
    host:/# apt-get install grub2
+   ```
 
-1. Install `grub2 directly into the hard disk image, and ask it to use `/boot` under
+1. Install `grub2` directly into the hard disk image, and ask it to use `/boot` under
    the already mounted `/srv/debian` directory to hold its configuration files:
       ```
       host:/# grub-install --target=i386-pc --recheck --boot-directory=/srv/debian/boot /dev/loop0
